@@ -13,6 +13,9 @@ services:
       - ADMIN_PASS=${ADMIN_PASS}
       - LIST_DB=${LIST_DB}
       - GIT_REPO_URL_MODULES=${GIT_REPO_URL_MODULES}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_ENABLED=${REDIS_ENABLED}
+      - REDIS_HOST=${REDIS_HOST}
     volumes:
       - /home/emerson/odoo/addons:/mnt/extra-addons
       - /home/emerson/odoo/etc:/etc/odoo
