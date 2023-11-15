@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   odoo:
-    image: odoo:16
+    image: ejtrader/odoo
     user: root
     environment:
       - HOST=${POSTGRES_HOST}
