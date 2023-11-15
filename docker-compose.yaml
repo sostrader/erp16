@@ -17,8 +17,8 @@ services:
       - REDIS_ENABLED=${REDIS_ENABLED}
       - REDIS_HOST=${REDIS_HOST}
     volumes:
-      - /home/emerson/odoo/addons:/mnt/extra-addons
-      - /home/emerson/odoo/etc:/etc/odoo
+      - odoo_addons:/mnt/extra-addons
+      - odoo_etc:/etc/odoo
     networks:
       - traefik_public
       - db_network
@@ -72,6 +72,12 @@ services:
         - traefik.backend.loadbalancer.stickiness.secure=true
         - traefik.backend.loadbalancer.stickiness.httpOnly=true
         - traefik.backend.loadbalancer.stickiness.sameSite=none # none lax strict
+
+volumes:
+  odoo_addons:
+    external: true
+  odoo_etc:
+    external: true
 
 networks:
   traefik_public:

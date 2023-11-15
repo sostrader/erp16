@@ -41,23 +41,38 @@ fi
 pip3 install -r /$ADDONS_DIR/requirements.txt
 
 DB_ARGS=()
+ODDO_ARGS=()
+
 function check_config() {
     param="$1"
     value="$2"
     if grep -q -E "^\s*\b${param}\b\s*=" "$ODOO_RC" ; then       
-        value=$(grep -E "^\s*\b${param}\b\s*=" "$ODOO_RC" |cut -d " " -f3|sed 's/["\n\r]//g')
-    fi;
-    DB_ARGS+=("--${param}")
-    DB_ARGS+=("${value}")
+        value=$(grep -E "^\s*\b${param}\b\s*=" "$ODOO_RC" | cut -d " " -f3 | sed 's/["\n\r]//g')
+    fi
+
+    # Adicionar apenas argumentos relacionados ao banco de dados ao DB_ARGS
+    case "$param" in
+        db_host|db_port|db_user|db_password)
+            DB_ARGS+=("--${param}")
+            DB_ARGS+=("${value}")
+            ;;
+        *)
+            # Outros argumentos podem ser adicionados a ODDO_ARGS se necessário
+            ODDO_ARGS+=("--${param}")
+            ODDO_ARGS+=("${value}")
+            ;;
+    esac
 }
+# Configurar argumentos de banco de dados
 check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
+
+# Adicionar outros argumentos, se necessário
 check_config "db_name" "$DB_NAME"
 check_config "admin_passwd" "$ADMIN_PASS"
 check_config "list_db" "$LIST_DB"
-
 
 case "$1" in
     -- | odoo)
