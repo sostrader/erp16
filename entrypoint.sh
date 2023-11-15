@@ -27,6 +27,8 @@ ADDONS_DIR="/mnt/extra-addons"
 # Clonar ou atualizar o repositório
 if [ -d "$ADDONS_DIR/.git" ]; then
     echo "Atualizando o repositório existente em $ADDONS_DIR"
+    # Adicione a configuração de pull aqui se desejar uma configuração local em vez de global
+    git -C "$ADDONS_DIR" config pull.rebase false
     git -C "$ADDONS_DIR" pull
 else
     echo "Clonando o repositório em $ADDONS_DIR"
