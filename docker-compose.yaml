@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  odoo:
+    image: odoo:16
+    user: root
+    environment:
+      - HOST=${POSTGRES_HOST}
+      - PORT=${POSTGRES_PORT}
+      - USER=${POSTGRES_USER}
+      - PASSWORD=${POSTGRES_PASS}
+      - DB_NAME=${POSTGRES_DB}
+      - ADMIN_PASS=${ADMIN_PASS}
+      - LIST_DB=${LIST_DB}
+    volumes:
+      - /home/emerson/odoo/addons:/mnt/extra-addons
+      - /home/emerson/odoo/etc:/etc/odoo
+    networks:
+      - traefik_public
+      - db_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          cpus: ${CPUS}
+          memory: ${MEMORY}
+
+      labels:
+        # global config
+        - traefik.enable=true
+        - traefik.docker.network=traefik_public
+        # main routers 8069 web rule "/*"
+        - traefik.http.routers.odoo.tls=true
+        - traefik.http.routers.odoo.entrypoints=websecure
+        - traefik.http.routers.odoo.rule=Host(`${DOMAIN}`)
+        - traefik.http.routers.odoo.service=odoo
+        - traefik.http.routers.odoo.middlewares=gzip
+        - traefik.http.routers.odoo.tls.certresolver=le
+        - traefik.http.services.odoo.loadbalancer.server.port=8069
+        # main routers 8072 websocket rule /websocket
+        - traefik.http.routers.backend-websock.tls=true
+        - traefik.http.routers.backend-websock.entrypoints=websecure
+
+        - traefik.http.routers.backend-websock.rule=Path(`/websocket`) && Host(`${DOMAIN}`)
+        - traefik.http.routers.backend-websock.middlewares=upgradeheader,gzip
+        - traefik.http.routers.backend-websock.service=backend-websock
+        - traefik.http.routers.backend-websock.tls.certresolver=le
+        - traefik.http.services.backend-websock.loadbalancer.server.port=8072
+        # upgrade headers
+        - traefik.http.middlewares.upgradeheader.headers.customRequestHeaders.Upgrade=websocket
+        - traefik.http.middlewares.upgradeheader.headers.customRequestHeaders.Connection=Upgrade
+        - traefik.http.middlewares.upgradeheader.headers.hostsproxyheaders=websocket,Upgrade
+        - traefik.http.middlewares.upgradeheader.headers.forcestsheader=true
+        - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+        - traefik.http.middlewares.odoo-header.headers.contentSecurityPolicy=upgrade-insecure-requests
+        # gzip compress
+        - traefik.http.middlewares.gzip.compress=true
+        # cors
+        - traefik.http.middlewares.my-cors.headers.AccessControlAllowMethods=GET,OPTIONS,PUT
+        - traefik.http.middlewares.my-cors.headers.AccessControlAllowOriginList=https://${DOMAIN}
+        - traefik.http.middlewares.my-cors.headers.AccessControlMaxAge=100
+        - traefik.http.middlewares.my-cors.headers.AddVaryHeader=true
+        # cookies
+        - traefik.backend.loadbalancer.stickiness.secure=true
+        - traefik.backend.loadbalancer.stickiness.httpOnly=true
+        - traefik.backend.loadbalancer.stickiness.sameSite=none # none lax strict
+
+networks:
+  traefik_public:
+    external: true
+  db_network:
+    external: true
