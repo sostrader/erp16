@@ -18,7 +18,7 @@ fi
 : ${LIST_DB:='False'}
 
 # Definir variáveis de ambiente para URL e branch do repositório
-: ${GIT_REPO_URL:='https://github.com/sostrader/erp-modules.git'}
+: ${GIT_REPO_URL_MODULES:='https://github.com/sostrader/erp-modules.git'}
 : ${GIT_REPO_BRANCH:='main'}
 
 # Caminho para a pasta onde o repositório será clonado
@@ -30,7 +30,7 @@ if [ -d "$ADDONS_DIR/.git" ]; then
     git -C "$ADDONS_DIR" pull
 else
     echo "Clonando o repositório em $ADDONS_DIR"
-    git clone --branch "$GIT_REPO_BRANCH" "$GIT_REPO_URL" "$ADDONS_DIR"
+    git clone --branch "$GIT_REPO_BRANCH" "$GIT_REPO_URL_MODULES" "$ADDONS_DIR"
 fi
 
 

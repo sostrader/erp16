@@ -12,6 +12,7 @@ services:
       - DB_NAME=${POSTGRES_DB}
       - ADMIN_PASS=${ADMIN_PASS}
       - LIST_DB=${LIST_DB}
+      - GIT_REPO_URL_MODULES=${GIT_REPO_URL_MODULES}
     volumes:
       - /home/emerson/odoo/addons:/mnt/extra-addons
       - /home/emerson/odoo/etc:/etc/odoo
