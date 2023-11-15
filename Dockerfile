@@ -83,7 +83,7 @@ COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 
 RUN chmod +x entrypoint.sh
-RUN chmod +x wait-for-psql.py
+
 
 # Set permissions and Mount /var/lib/odoo to allow restoring filestore and /mnt/extra-addons for users addons
 RUN chown odoo /etc/odoo/odoo.conf \
@@ -100,6 +100,7 @@ ENV ODOO_RC /etc/odoo/odoo.conf
 COPY GeoLite2-City.mmdb /usr/share/GeoIP/GeoLite2-City.mmdb
 COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
+RUN chmod +x /usr/local/bin/wait-for-psql.py
 # Set default user when running the container
 USER odoo
 

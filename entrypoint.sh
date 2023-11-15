@@ -37,8 +37,8 @@ fi
 
 
 #install python packages
-pip3 install pip --upgrade
-pip3 install -r /etc/odoo/requirements.txt
+# pip3 install pip --upgrade
+pip3 install -r /$ADDONS_DIR/requirements.txt
 
 DB_ARGS=()
 function check_config() {
