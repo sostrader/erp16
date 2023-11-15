@@ -28,17 +28,16 @@ ADDONS_DIR="/mnt/extra-addons"
 if [ -d "$ADDONS_DIR/.git" ]; then
     echo "Atualizando o repositório existente em $ADDONS_DIR"
     # Adicione a configuração de pull aqui se desejar uma configuração local em vez de global
-    git -C "$ADDONS_DIR" config pull.rebase false
-    git -C "$ADDONS_DIR" pull
+    cd $ADDONS_DIR
+    git config pull.rebase false
+    git pull
 else
     echo "Clonando o repositório em $ADDONS_DIR"
-    git clone --branch "$GIT_REPO_BRANCH" "$GIT_REPO_URL_MODULES" "$ADDONS_DIR"
+    cd $ADDONS_DIR
+    git clone --branch $GIT_REPO_BRANCH $GIT_REPO_URL_MODULES .
 fi
 
 
-#install python packages
-# pip3 install pip --upgrade
-pip3 install -r /$ADDONS_DIR/requirements.txt
 
 function update_or_add_config() {
     param="$1"
@@ -55,9 +54,9 @@ function update_or_add_config() {
 }
 
 # Adicionar ou atualizar parametros no arquivo de configuração
-update_or_add_config "db_name" "$DB_NAME" "$ODOO_RC"
+#update_or_add_config "db_name" "$DB_NAME" "$ODOO_RC"
 update_or_add_config "admin_passwd" "$ADMIN_PASS" "$ODOO_RC"
-update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
+#update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
 
 
 DB_ARGS=()
@@ -75,6 +74,7 @@ check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 
+pip3 install -r /$ADDONS_DIR/requirements.txt
 
 case "$1" in
     -- | odoo)
