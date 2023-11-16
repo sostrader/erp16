@@ -16,6 +16,12 @@ fi
 : ${ADMIN_PASS:='odoo'}
 : ${LIST_DB:='True'}
 
+: ${REDIS_ENABLED:='True'}
+: ${REDIS_PORT:='6379'}
+: ${REDIS_HOST:='redis'}
+: ${REDIS_DB:='1'}
+: ${REDIS_PASS:='redis'}
+
 # Caminho para a pasta onde o repositório será clonado
 ADDONS_DIR="/mnt/extra-addons"
 
@@ -47,6 +53,12 @@ function update_or_add_config() {
 #update_or_add_config "db_name" "$DB_NAME" "$ODOO_RC"
 update_or_add_config "admin_passwd" "$ADMIN_PASS" "$ODOO_RC"
 update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
+
+update_or_add_config "enable_redis" "$REDIS_ENABLED" "$ODOO_RC"
+update_or_add_config "redis_host" "$REDIS_HOST" "$ODOO_RC"
+update_or_add_config "redis_port" "$REDIS_PORT" "$ODOO_RC"
+update_or_add_config "redis_pass" "$REDIS_PASS" "$ODOO_RC"
+update_or_add_config "redis_dbindex" "$REDIS_DB" "$ODOO_RC"
 
 
 DB_ARGS=()

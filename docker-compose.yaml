@@ -10,9 +10,11 @@ services:
       - USER=${POSTGRES_USER}
       - PASSWORD=${POSTGRES_PASS}
       - ADMIN_PASS=${ADMIN_PASS}
-      - REDIS_PORT=${REDIS_PORT}
       - REDIS_ENABLED=${REDIS_ENABLED}
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASS=${REDIS_PASS}
+      - REDIS_DB=${REDIS_DB}
     volumes:
       - odoo_addons:/mnt/extra-addons
       - odoo_etc:/etc/odoo
