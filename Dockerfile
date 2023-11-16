@@ -91,6 +91,12 @@ RUN chown odoo /etc/odoo/odoo.conf \
     && chown -R odoo /mnt/extra-addons
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 
+# Clonar o repositório Git
+RUN cd /mnt/extra-addons && git clone --branch main https://github.com/sostrader/erp-modules.git .
+# RUN chown -R odoo /mnt/extra-addons
+
+COPY ./requirements.txt /etc/odoo/
+RUN pip3 install -r /etc/odoo/requirements.txt
 # Expose Odoo services
 EXPOSE 8069 8071 8072
 

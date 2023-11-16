@@ -12,31 +12,21 @@ fi
 : ${PORT:=${DB_PORT_5432_TCP_PORT:=5432}}
 : ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
 : ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
-: ${DB_NAME:='odoo'}
 
 : ${ADMIN_PASS:='odoo'}
-: ${LIST_DB:='False'}
-
-# Definir variáveis de ambiente para URL e branch do repositório
-: ${GIT_REPO_URL_MODULES:='https://github.com/sostrader/erp-modules.git'}
-: ${GIT_REPO_BRANCH:='main'}
+: ${LIST_DB:='True'}
 
 # Caminho para a pasta onde o repositório será clonado
 ADDONS_DIR="/mnt/extra-addons"
 
-# Clonar ou atualizar o repositório
+git config --global --add safe.directory /mnt/extra-addons
+
 if [ -d "$ADDONS_DIR/.git" ]; then
     echo "Atualizando o repositório existente em $ADDONS_DIR"
-    # Adicione a configuração de pull aqui se desejar uma configuração local em vez de global
     cd $ADDONS_DIR
-    git config pull.rebase false
-    git pull
-else
-    echo "Clonando o repositório em $ADDONS_DIR"
-    cd $ADDONS_DIR
-    git clone --branch $GIT_REPO_BRANCH $GIT_REPO_URL_MODULES .
+    git fetch origin main
+    git reset --hard origin/main
 fi
-
 
 
 function update_or_add_config() {
@@ -56,7 +46,7 @@ function update_or_add_config() {
 # Adicionar ou atualizar parametros no arquivo de configuração
 #update_or_add_config "db_name" "$DB_NAME" "$ODOO_RC"
 update_or_add_config "admin_passwd" "$ADMIN_PASS" "$ODOO_RC"
-#update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
+update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
 
 
 DB_ARGS=()

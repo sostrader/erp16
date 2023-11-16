@@ -9,16 +9,13 @@ services:
       - PORT=${POSTGRES_PORT}
       - USER=${POSTGRES_USER}
       - PASSWORD=${POSTGRES_PASS}
-      - DB_NAME=${POSTGRES_DB}
       - ADMIN_PASS=${ADMIN_PASS}
-      - LIST_DB=${LIST_DB}
-      - GIT_REPO_URL_MODULES=${GIT_REPO_URL_MODULES}
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_ENABLED=${REDIS_ENABLED}
       - REDIS_HOST=${REDIS_HOST}
     volumes:
-      - /home/emerson/odoo/addons:/mnt/extra-addons
-      - /home/emerson/odoo/etc:/etc/odoo
+      - odoo_addons:/mnt/extra-addons
+      - odoo_etc:/etc/odoo
     networks:
       - traefik_public
       - db_network
@@ -72,6 +69,12 @@ services:
         - traefik.backend.loadbalancer.stickiness.secure=true
         - traefik.backend.loadbalancer.stickiness.httpOnly=true
         - traefik.backend.loadbalancer.stickiness.sameSite=none # none lax strict
+
+volumes:
+  odoo_addons:
+    external: true
+  odoo_etc:
+    external: true
 
 networks:
   traefik_public:

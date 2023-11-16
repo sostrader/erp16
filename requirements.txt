@@ -1,0 +1,6 @@
+redis==4.0.2
+graphene==3.0
+graphql-server==3.0.0b4
+markdown
+bokeh==3.1.1
+plotly==5.13.1
