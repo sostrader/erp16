@@ -14,7 +14,7 @@ fi
 : ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
 
 : ${ADMIN_PASS:='odoo'}
-: ${LIST_DB:='True'}
+: ${LIST_DB:='False'}
 
 : ${REDIS_ENABLED:='True'}
 : ${REDIS_PORT:='6379'}
