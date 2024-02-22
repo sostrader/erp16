@@ -15,6 +15,7 @@ fi
 
 : ${ADMIN_PASS:='odoo'}
 : ${LIST_DB:='False'}
+: ${SERVER_ENV:='prod'}
 
 
 
@@ -49,6 +50,7 @@ function update_or_add_config() {
 #update_or_add_config "db_name" "$DB_NAME" "$ODOO_RC"
 update_or_add_config "admin_passwd" "$ADMIN_PASS" "$ODOO_RC"
 update_or_add_config "list_db" "$LIST_DB" "$ODOO_RC"
+update_or_add_config "running_env" "$SERVER_ENV" "$ODOO_RC"
 
 
 DB_ARGS=()
