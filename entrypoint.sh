@@ -75,12 +75,12 @@ case "$1" in
             exec odoo "$@"
         else
             wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-            exec odoo --load=session_redis,logging_json "$@" "${DB_ARGS[@]}"
+            exec odoo "$@" "${DB_ARGS[@]}"
         fi
         ;;
     -*)
         wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-        exec odoo --load=session_redis,logging_json "$@" "${DB_ARGS[@]}"
+        exec odoo "$@" "${DB_ARGS[@]}"
         ;;
     *)
         exec "$@"
